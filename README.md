@@ -26,3 +26,8 @@ Then when calling `pandoc` add the following switch
     --filter ~/.pandoc/filters/verbatim.hs
 ~~~~
 
+# Limitations
+
+This filter only works when converting to latex
+and thus also PDF.
+

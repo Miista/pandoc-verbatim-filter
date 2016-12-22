@@ -5,12 +5,15 @@ import Text.Pandoc.JSON
 main :: IO ()
 main = toJSONFilter verbatim
 
-verbatim :: Block -> Block
-verbatim = bottomUp verbatimInline
+verbatim :: Maybe Format -> Block -> Block
+verbatim (Just f)
+  | f == Format "latex" = bottomUp verbatimInline
+verbatim _ = id
 
 mkVerbatim :: String -> String
-mkVerbatim s = unlines ["\\begin{verbatim}", s, "\\end{verbatim}"]
+mkVerbatim s = "\\verb!" ++ s ++ "!"
 
 verbatimInline :: Inline -> Inline
-verbatimInline (Code attr@(_,[],_) code) = Span attr [RawInline (Format "latex") $ concat ["\\verb!", code, "!"]]
+verbatimInline (Code attr@(_,[],_) code) =
+    Span attr [RawInline (Format "latex") (mkVerbatim code)]
 verbatimInline x = x
