@@ -13,7 +13,7 @@ then the word "text" is not typed in a monospaced font
 even though it should be.
 
 This filter remedies that by turning all inline code blocks
-into invocations of `\verb`.
+into invocations of `\textt`.
 
 # How to call this filter
 
