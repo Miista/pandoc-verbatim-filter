@@ -10,8 +10,17 @@ verbatim (Just f)
   | f == Format "latex" = bottomUp verbatimInline
 verbatim _ = id
 
+-- | "Protects" against "Missing $ inserted"
+-- when inline code contains underscores.
+--
+-- The underscores are prefixed with a backslash.
+protect :: String -> String
+protect [] = []
+protect ('_':xs) = "\\_" ++ protect xs
+protect (x:xs) = x : protect xs
+
 mkVerbatim :: String -> String
-mkVerbatim s = "\\verb!" ++ s ++ "!"
+mkVerbatim s = "\\texttt{" ++ (protect s) ++ "}"
 
 verbatimInline :: Inline -> Inline
 verbatimInline (Code attr@(_,[],_) code) =
